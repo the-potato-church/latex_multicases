@@ -1,0 +1,75 @@
+%%
+%% This is file `multicases.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% multicases.dtx  (with options: `package')
+%% This is a generated file.
+%% 
+%% multicases.sty - Multi-column cases environment
+%% Copyright (C) 2025 Potato Man
+%% 
+%% This package is free software: you can redistribute it and/or modify it under
+%% the terms of the GNU Affero General Public License as published by the Free
+%% Software Foundation, either version 3 of the License, or (at your option) any later version.
+%% 
+%% This package is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+%% without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+%% See <https://www.gnu.org/licenses/> for details.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{multicases}[2025/03/23 v1.0 Multi-column cases environment]
+\ExplSyntaxOn
+\NewDocumentEnvironment { multicases } { O{2} O{} }
+  {%
+    % ----- Begin of environment -----
+    \group_begin: % Start a group to localize all changes
+    %
+    \renewcommand\arraystretch{1.2}% Locally adjust line spacing in the array
+    \left\{ % Open the left curly brace delimiter
+    %
+    % Construct the column alignment specification locally:
+    \tl_clear:N \l_tmpb_tl % Clear the temporary token list for column specification
+    \tl_if_empty:nTF { #2 }
+      {
+        % No alignment string provided: default to the first column centered, all other columns left-aligned.
+        % #1 is the total number of columns; use 'c' for the first column, then repeat '*{#1-1}{@{\quad}l}'.
+        \tl_put_right:Nn \l_tmpb_tl { c }
+        \prg_replicate:nn { #1 - 1 } { \tl_put_right:Nn \l_tmpb_tl { @{ \quad } l } }
+      }
+      {
+        % Alignment string (#2) provided: use its characters for column alignments.
+        % Handle each alignment character, including the special case for 'a'.
+        \tl_set:Nx \l_tmpa_tl { \tl_head:n { #2 } }  % Extract the first alignment character
+        \tl_set:Nx \l_tmpc_tl { \tl_tail:n { #2 } }  % Extract the remaining alignment characters
+        \tl_map_inline:Nn \l_tmpa_tl {
+          \tl_if_eq:nnTF ##1 { a }
+            % First column does not have a preceding \quad, so handle separately
+            { \tl_put_right:Nn \l_tmpb_tl { r @{} l } } % Handle 'a' for the first column (align-like)
+            { \tl_put_right:Nn \l_tmpb_tl { \l_tmpa_tl } } % Handle other alignments for the first column
+        }
+        \tl_map_inline:Nn \l_tmpc_tl {
+          \tl_if_eq:nnTF ##1 { a }
+            { \tl_put_right:Nn \l_tmpb_tl { @{ \quad } r @{} l } } % Handle 'a' option (align-like) for subsequent columns
+            { \tl_put_right:Nn \l_tmpb_tl { @{ \quad } ##1 } } % Add each remaining alignment character with \quad
+        }
+      }
+    % Add column pre/post padding removal (@{}) at both ends of the specification:
+    \tl_put_left:Nn  \l_tmpb_tl { @{} }
+    \tl_put_right:Nn \l_tmpb_tl { @{} }
+    %
+    % Begin the array with the constructed column specification:
+    \array{ \tl_use:N \l_tmpb_tl }
+  }
+  {%
+    % ----- End of environment -----
+    \endarray            % End the array environment (matching \array)
+    \right.              % Close the delimiter with an empty right brace
+    \kern-\nulldelimiterspace % Remove the spacing of the missing right delimiter
+    \group_end:          % End of local group (restores \arraystretch and temp definitions)
+  }
+\ExplSyntaxOff
+
+\endinput
+%%
+%% End of file `multicases.sty'.

@@ -1,0 +1,74 @@
+\documentclass{article}
+\usepackage[a4paper,margin=0.7in]{geometry}
+
+\usepackage{amsmath}
+\usepackage{multicases}
+
+\title{Multicases}
+\author{Potato Man}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\section*{Introduction}
+The `multicases` package provides an environment for typesetting cases with multiple columns. This is useful for displaying piecewise functions with additional annotations or explanations in separate columns.
+
+\section*{Usage}
+The `multicases` environment takes two optional arguments:
+\begin{itemize}
+    \item The number of columns (default is 2).
+    \item The alignment specification for the columns (default is the first column centered and the rest left-aligned). The alignment characters are `l`, `c`, `r`, and `a` (for \verb*|align|-like behaviour).
+\end{itemize}
+
+\begin{verbatim}
+\begin{multicases}[<number of columns>][<alignment>]
+    <column 1> & <column 2> & <column 3> & ... \\
+    ...
+\end{multicases}
+\end{verbatim}
+
+\section*{Examples}
+
+\subsection*{1 - custom alignment}
+\begin{equation}
+    f(x) = 
+        \begin{multicases}[3][cla]  % 3 columns; first center, second left, third align-like
+            x^2 + \sum{a_{x}^3}            & \text{if $x<0$}       & 0~&(\text{negative}) \\[1em]
+            \displaystyle\frac{1}{x^2}     & \text{if $x>0$}       & 1/x~&(\text{positive}) \\[1em]
+            0                              & \text{otherwise}      & 0~&(\text{zero})
+        \end{multicases}
+\end{equation}
+
+\begin{verbatim}
+\begin{equation}
+    f(x) = 
+    \begin{multicases}[3][lca]  % 3 columns; first center, second left, third align-like
+        \begin{multicases}[3][cla]
+            x^2 + \sum{a_{x}^3}        & \text{if $x<0$}  & 0~&(\text{negative}) \\[1em]
+            \displaystyle\frac{1}{x^2} & \text{if $x>0$}  & 1/x~&(\text{positive}) \\[1em]
+            0                          & \text{otherwise} & 0~&(\text{zero})
+        \end{multicases}
+\end{equation}
+\end{verbatim}
+
+\subsection*{2 - default behaviour}
+\begin{equation}
+    f(n) = 
+        \begin{multicases}
+            n/2  & \text{if $n$ is even} \\
+            3n+1 & \text{if $n$ is odd}
+        \end{multicases}
+\end{equation}
+
+\begin{verbatim}
+\begin{equation}
+    f(n) = 
+        \begin{multicases}
+            n/2  & \text{if $n$ is even} \\
+            3n+1 & \text{if $n$ is odd}
+        \end{multicases}
+\end{equation}
+\end{verbatim}
+
+\end{document}
