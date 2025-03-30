@@ -10,6 +10,8 @@
 %% See <https://www.gnu.org/licenses/> for details.
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{multicases}[2025/03/23 v1.0 Multi-column cases environment]
+\RequirePackage{xparse}
+\RequirePackage{expl3}
 \ExplSyntaxOn
 \NewDocumentEnvironment { multicases } { O{2} O{} }
   {%
@@ -50,7 +52,7 @@
     \tl_put_right:Nn \l_tmpb_tl { @{} }
     %
     % Begin the array with the constructed column specification:
-    \array{ \l_tmpb_tl }
+    \array{ \tl_use:N \l_tmpb_tl }
   }
   {%
     % ----- End of environment -----
